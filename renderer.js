@@ -121,9 +121,16 @@ btnClose.addEventListener('click', () => {
 });
 
 // ==========================================
-// KEYBOARD SHORTCUT (Save manual)
+// KEYBOARD SHORTCUT (Save manual & Panic Hide)
 // ==========================================
 document.addEventListener('keydown', (e) => {
+    // Tombol Panik (Esc) untuk sembunyi
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        window.stealthAPI.hideWindow();
+    }
+    
+    // Save manual (Ctrl+S)
     if ((e.metaKey || e.ctrlKey) && e.key === 's') {
         e.preventDefault();
         autoSave();
