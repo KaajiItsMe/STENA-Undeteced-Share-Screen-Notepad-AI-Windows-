@@ -1,0 +1,41 @@
+==================================================
+        PANDUAN STEALTH NOTEPAD + AI
+==================================================
+
+Aplikasi ini didesain untuk berjalan di belakang layar secara rahasia (Stealth Mode) dan tidak akan muncul di Taskbar.
+
+--- DAFTAR SHORTCUT (TOMBOL PINTAS) ---
+1. Buka / Sembunyikan Aplikasi
+   Tekan: Ctrl + Shift + B
+
+2. Buka Tab Notepad Cepat
+   Tekan: Ctrl + Shift + N
+
+3. Buka Tab AI Chat Cepat
+   Tekan: Ctrl + Shift + A
+
+--- SHORTCUT PINDAH POSISI (Hanya saat aplikasi terbuka) ---
+4. Geser Jendela ke Atas
+   Tekan: Ctrl + Shift + Panah Atas
+
+5. Geser Jendela ke Bawah
+   Tekan: Ctrl + Shift + Panah Bawah
+
+6. Geser Jendela ke Kiri
+   Tekan: Ctrl + Shift + Panah Kiri
+
+7. Geser Jendela ke Kanan
+   Tekan: Ctrl + Shift + Panah Kanan
+
+8. Kembalikan Jendela ke Pojok Kanan Bawah (Reset Posisi)
+   Tekan: Ctrl + Shift + R
+
+--- JIKA SHORTCUT GAGAL ATAU ERROR ---
+Terkadang, proses aplikasi lama mungkin masih berjalan tersembunyi (zombie process) di komputer Anda, sehingga membuat tombol shortcut tidak merespon saat aplikasi baru dibuka.
+
+
+
+Solusi:
+1. Klik dua kali (jalankan) file "fix.bat" yang ada di folder ini.
+2. File tersebut akan secara otomatis membersihkan dan menutup paksa semua proses aplikasi yang error/nyangkut di memori.
+3. Setelah jendela fix menghilang (selesai), Anda bisa membuka kembali aplikasinya secara normal.

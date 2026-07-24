@@ -1,0 +1,52 @@
+{
+  "name": "stealth-notepad",
+  "version": "1.0.0",
+  "description": "Notepad AI rahasia dengan fitur Stealth Mode (tidak terdeteksi di Screen Sharing / Zoom / OBS), dilengkapi Asisten AI, Perekam Audio, dan Ekstraksi Dokumen otomatis.",
+  "author": "Eka Aji Pramudia. UNM",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "node build-config.js && electron-builder",
+    "build:win": "node build-config.js && electron-builder --win",
+    "build:mac": "node build-config.js && electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.stealth.notepad",
+    "productName": "Stena",
+    "copyright": "Copyright © 2026 Eka Aji Pramudia. UNM",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "portable",
+      "artifactName": "Stena-Windows-${version}.${ext}",
+      "publisherName": "Eka Aji Pramudia",
+      "icon": "icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "mac": {
+      "target": "dmg",
+      "artifactName": "Stena-Mac-${arch}-${version}.${ext}",
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "@electron/remote": "^2.1.3",
+    "adm-zip": "^0.6.0",
+    "any-extractor": "^3.1.0",
+    "axios": "^1.18.1",
+    "dotenv": "^17.4.2",
+    "mammoth": "^1.12.0",
+    "pdf-parse": "^2.4.5",
+    "pdfjs-dist": "^6.1.200",
+    "win32-api": "^26.1.2"
+  }
+}

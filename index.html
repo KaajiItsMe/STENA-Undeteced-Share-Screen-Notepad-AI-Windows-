@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stealth Notepad + AI</title>
+    <style>
+        /* === SEMUA STYLE SEBELUMNYA TETAP ADA === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Container utama - lebih besar untuk AI */
+        .notepad-container {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            background: rgba(20, 22, 30, 0.92);
+            backdrop-filter: blur(16px) saturate(1.4);
+            -webkit-backdrop-filter: blur(16px) saturate(1.4);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px 10px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            -webkit-app-region: drag;
+        }
+
+        .header-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            -webkit-app-region: no-drag;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-close:hover {
+            background: rgba(255, 70, 70, 0.3);
+            color: #ff6b6b;
+        }
+
+        /* ⭐ BARU: TAB AI */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Content Area - Notepad & AI */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .tab-content {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* NOTEPAD */
+        .note-area {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 15px;
+            line-height: 1.7;
+            padding: 12px 14px;
+            resize: none;
+            outline: none;
+            font-family: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace;
+            letter-spacing: 0.2px;
+            width: 100%;
+        }
+
+        .note-area::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .note-area::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .note-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .note-area::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        /* ⭐ BARU: AI CHAT PANEL */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 0;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: rgba(99, 102, 241, 0.3);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .message.ai {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .message .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin-top: 6px;
+            white-space: pre-wrap;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            padding: 8px 14px 12px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-send {
+            background: rgba(99, 102, 241, 0.4);
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .btn-send:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-send:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* ⭐ BARU: AI ACTION BUTTONS */
+        .ai-actions {
+            display: flex;
+            gap: 6px;
+            padding: 6px 14px 10px 14px;
+            flex-wrap: wrap;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .ai-action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.4);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .ai-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* FOOTER */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px 4px 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ade80;
+            display: inline-block;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        .status-dot.hidden {
+            background: #f87171;
+            animation: none;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+        }
+
+        .shortcut-hint {
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .shortcut-hint kbd {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-family: inherit;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .typing-indicator {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            padding: 8px 14px;
+        }
+
+        /* ⭐ Document Chip */
+        .doc-chip-area {
+            display: none;
+            padding: 6px 14px 0 14px;
+        }
+
+        .doc-chip-area.visible {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .doc-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 20px;
+            padding: 4px 10px 4px 8px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 200px;
+            overflow: hidden;
+        }
+
+        .doc-chip .chip-icon {
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .doc-chip .chip-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .doc-chip-remove {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 13px;
+            padding: 0;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .doc-chip-remove:hover {
+            color: rgba(255, 100, 100, 0.8);
+        }
+
+        /* ⭐ Tombol Mikrofon */
+        .btn-mic {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.5);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-mic:hover {
+            background: rgba(99, 102, 241, 0.25);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-mic.recording {
+            background: rgba(239, 68, 68, 0.35);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #f87171;
+            animation: pulse-record 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse-record {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn-mic.transcribing {
+            background: rgba(234, 179, 8, 0.25);
+            color: #fbbf24;
+            cursor: not-allowed;
+        }
+
+        /* ⭐ Mic Options Menu */
+        .mic-wrapper {
+            position: relative;
+            display: flex;
+            gap: 2px;
+        }
+
+        .btn-mic-opt {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.5);
+            width: 20px;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-mic-opt:hover {
+            background: rgba(99, 102, 241, 0.25);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .rec-options-menu {
+            display: none;
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            background: rgba(30, 30, 40, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px;
+            width: 160px;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .rec-options-menu.visible {
+            display: flex;
+        }
+
+        .rec-opt-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+        }
+
+        .rec-opt-label input {
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="notepad-container">
+        <!-- HEADER -->
+        <div class="header">
+            <span class="header-title">📝 Stena</span>
+            <div class="header-actions">
+                <button class="btn" id="btnMinimize" title="Minimize">─</button>
+                <button class="btn btn-close" id="btnClose" title="Close">✕</button>
+            </div>
+        </div>
+
+        <!-- ⭐ TAB: Notepad / AI Chat -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="notepad">📝 Notepad</button>
+            <button class="tab-btn" data-tab="ai">🤖 AI Chat</button>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+
+            <!-- TAB: NOTEPAD -->
+            <div class="tab-content active" id="tab-notepad">
+                <textarea class="note-area" id="noteInput"
+                    placeholder="Tulis catatan rahasia di sini...&#10;(Otomatis tersimpan)"
+                    spellcheck="false"></textarea>
+            </div>
+
+            <!-- ⭐ TAB: AI CHAT -->
+            <div class="tab-content" id="tab-ai">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai">👋 Halo! Saya AI asistenmu. Tanya apa saja tentang coding, atau minta saya
+                        generate kode!</div>
+                </div>
+
+                <!-- AI Action Buttons -->
+                <div class="ai-actions">
+                    <!-- ⭐ TOMBOL UPLOAD DOKUMEN -->
+                    <button class="ai-action-btn" id="btnExtractDoc" style="background:rgba(99,102,241,0.25);">
+                        📄 Upload File
+                    </button>
+                    <!-- ⭐ TOMBOL HAPUS CHAT -->
+                    <button class="ai-action-btn" id="btnClearChat" style="background:rgba(255,100,100,0.15); color:#ff9999;">
+                        🗑️ Hapus Chat
+                    </button>
+                    <button class="ai-action-btn" data-action="explain">📖 Jelaskan Konsep</button>
+                    <button class="ai-action-btn" data-action="debug">💡 Bantu Masalah</button>
+                    <button class="ai-action-btn" data-action="refactor">🔧 Saran Perbaikan</button>
+                    <button class="ai-action-btn" data-action="test">📝 Bantu Tugas</button>
+                    <button class="ai-action-btn" data-action="generate">✍️ Bantu Menulis</button>
+                </div>
+
+                <!-- ⭐ Document Chip Area -->
+                <div class="doc-chip-area" id="docChipArea">
+                    <div class="doc-chip" id="docChip">
+                        <span class="chip-icon" id="chipIcon">📄</span>
+                        <span class="chip-name" id="chipName">file.pdf</span>
+                    </div>
+                    <button class="doc-chip-remove" id="btnRemoveDoc" title="Hapus dokumen">✕</button>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="mic-wrapper">
+                        <button class="btn-mic" id="btnMic" title="Rekam suara (mic) &#10;Tahan untuk rekam, lepas untuk transkripsi">🎤</button>
+                        <button class="btn-mic-opt" id="btnMicOpt" title="Opsi Rekaman">▲</button>
+                        
+                        <div class="rec-options-menu" id="recOptionsMenu">
+                            <label class="rec-opt-label">
+                                <input type="checkbox" id="chkRecMic" checked>
+                                Mikrofon
+                            </label>
+                            <label class="rec-opt-label">
+                                <input type="checkbox" id="chkRecSystem">
+                                Suara Sistem
+                            </label>
+                        </div>
+                    </div>
+                    <input class="chat-input" id="chatInput" placeholder="Tanya AI atau minta bikin kode..." />
+                    <button class="btn-send" id="btnSendChat">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <span class="footer-status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Visible</span>
+            </span>
+            <span class="shortcut-hint">
+                <kbd>⌘⇧B</kbd> Toggle · <kbd>⌘⇧↑↓←→</kbd> Move
+            </span>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>
