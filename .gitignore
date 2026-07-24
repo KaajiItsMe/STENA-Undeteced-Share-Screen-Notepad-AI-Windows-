@@ -22,7 +22,6 @@ out/
 .env
 .env.local
 .env.*
-API.txt
 
 # Local Data / History
 stealth-chat.json

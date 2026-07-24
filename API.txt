@@ -1,0 +1,37 @@
+# ==============================================================
+# KONFIGURASI API KEY GROQ (WAJIB)
+# Ganti teks di bawah ini dengan API Key milik Anda dari Groq.
+# ==============================================================
+GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
+
+# ==============================================================
+# PILIHAN OTAK AI (GROQ MODEL)
+# Silakan pilih model yang ingin digunakan dengan mengubah teks pada GROQ_MODEL.
+#
+# DAFTAR MODEL YANG TERSEDIA:
+#
+# 1. llama-3.3-70b-versatile (DEFAULT / DIREKOMENDASIKAN)
+#    - Performa: ⭐⭐⭐⭐⭐ (Sangat Pintar, setara GPT-4)
+#    - Kecepatan: ⭐⭐⭐⭐ (Cepat)
+#    - Konteks: 128K (Bisa mengingat percakapan yang sangat amat panjang / dokumen besar)
+#    - Catatan: Paling mantap untuk tugas kuliah, coding, atau analisis rumit.
+#
+# 2. llama-3.1-8b-instant
+#    - Performa: ⭐⭐⭐ (Standar Llama 3)
+#    - Kecepatan: ⭐⭐⭐⭐⭐ (Sangat Kilat)
+#    - Konteks: 128K (Konteks tetap panjang)
+#    - Catatan: Hemat token/kuota. Cocok untuk tanya-jawab ringan dan cepat.
+#
+# 3. mixtral-8x7b-32768
+#    - Performa: ⭐⭐⭐⭐ (Sangat Bagus)
+#    - Kecepatan: ⭐⭐⭐⭐⭐ (Kilat)
+#    - Konteks: 32K (Sedang)
+#    - Catatan: Alternatif cerdas selain Llama, hemat memori dengan model campuran (MoE).
+#
+# 4. gemma2-9b-it
+#    - Performa: ⭐⭐⭐ (Buatan Google)
+#    - Kecepatan: ⭐⭐⭐⭐ (Cepat)
+#    - Konteks: 8K (Pendek)
+#    - Catatan: Sangat efisien, bagus jika Anda lebih menyukai gaya bahasa AI Google.
+# ==============================================================
+GROQ_MODEL=llama-3.3-70b-versatile
