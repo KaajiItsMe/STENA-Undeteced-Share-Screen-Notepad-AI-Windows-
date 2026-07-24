@@ -121,23 +121,8 @@ btnClose.addEventListener('click', () => {
 });
 
 // ==========================================
-// KEYBOARD SHORTCUT (Save manual & Panic Hide)
+// KODE SHORTCUT DIHAPUS (Hanya memakai shortcut global)
 // ==========================================
-document.addEventListener('keydown', (e) => {
-    // Tombol Panik (Esc) untuk sembunyi
-    if (e.key === 'Escape') {
-        e.preventDefault();
-        window.stealthAPI.hideWindow();
-    }
-    
-    // Save manual (Ctrl+S)
-    if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-        e.preventDefault();
-        autoSave();
-        noteInput.style.opacity = '0.7';
-        setTimeout(() => noteInput.style.opacity = '1', 200);
-    }
-});
 
 // ==========================================
 // ⭐ BARU: TAB SWITCH (Notepad / AI)

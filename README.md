@@ -61,9 +61,11 @@ Untuk menyebarkan aplikasi ke komputer lain agar siapapun bisa memakainya tanpa 
 
 ## ⌨️ Daftar Shortcut Rahasia
 
-- `Ctrl + Shift + B` : Menampilkan atau menyembunyikan (*toggle*) aplikasi secara penuh.
-- `Esc` : Tombol panik untuk menyembunyikan aplikasi secepat kilat.
-- `Ctrl + S` : Menyimpan teks Notepad secara manual (meski sistem auto-save juga sudah bekerja setiap 1 detik).
+- **Ctrl + Shift + B** : Buka / Sembunyikan aplikasi (Toggle)
+- **Ctrl + Shift + N** : Buka Tab Notepad Cepat
+- **Ctrl + Shift + A** : Buka Tab AI Chat Cepat
+- **Ctrl + Shift + Panah (Atas/Bawah/Kiri/Kanan)** : Geser posisi jendela aplikasi
+- **Ctrl + Shift + R** : Kembalikan jendela ke pojok kanan bawah (Reset Posisi)
 
 ---
 
