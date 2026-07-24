@@ -17,21 +17,24 @@ Aplikasi ini didesain untuk berjalan di belakang layar secara rahasia (Stealth M
 4. Simpan Teks Notepad Manual (Auto-save sudah aktif 1 detik)
    Tekan: Ctrl + S
 
+5. Sembunyikan Aplikasi Secara Kilat (Panic Button)
+   Tekan: Esc
+
 --- SHORTCUT PINDAH POSISI (Hanya saat aplikasi terbuka) ---
-5. Geser Jendela ke Atas
+6. Geser Jendela ke Atas
    Tekan: Ctrl + Shift + Panah Atas
 
-6. Geser Jendela ke Bawah
+7. Geser Jendela ke Bawah
    Tekan: Ctrl + Shift + Panah Bawah
 
-7. Geser Jendela ke Kiri
+8. Geser Jendela ke Kiri
    Tekan: Ctrl + Shift + Panah Kiri
 
-8. Geser Jendela ke Kanan
+9. Geser Jendela ke Kanan
    Tekan: Ctrl + Shift + Panah Kanan
 
-9. Kembalikan Jendela ke Pojok Kanan Bawah (Reset Posisi)
-   Tekan: Ctrl + Shift + R
+10. Kembalikan Jendela ke Pojok Kanan Bawah (Reset Posisi)
+    Tekan: Ctrl + Shift + R
 
 --- JIKA SHORTCUT GAGAL ATAU ERROR ---
 Terkadang, proses aplikasi lama mungkin masih berjalan tersembunyi (zombie process) di komputer Anda, sehingga membuat tombol shortcut tidak merespon saat aplikasi baru dibuka.
