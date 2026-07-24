@@ -31,11 +31,13 @@ Jika Anda ingin membongkar kode sumber aplikasi ini:
    ```bash
    npm install
    ```
-4. Buat file `.env` (atau ikuti cara *portable* dengan `API.txt`) dan isi API Key dari Groq:
+4. Aplikasi ini membutuhkan kunci AI untuk beroperasi. Anda cukup menggunakan file `API.txt` bawaan (atau buat file `.env` jika Anda lebih familier dengan standar Node.js) dan isi API Key dari Groq:
    ```env
    GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
    GROQ_MODEL=llama-3.3-70b-versatile
    ```
+   *(Catatan: Baik menjalankan aplikasi dari source code (`npm start`) maupun dari file `.exe` portabel, aplikasi tetap dapat membaca kunci dari file `API.txt` yang berada di sebelahnya).*
+
 5. Untuk menjalankan aplikasi di tahap pengembangan (*development*):
    ```bash
    npm start
@@ -45,14 +47,15 @@ Jika Anda ingin membongkar kode sumber aplikasi ini:
 
 ## 📦 Membangun Versi Portable (.exe)
 
-Untuk menyebarkan aplikasi ke komputer lain tanpa perlu menginstal Node.js:
+Untuk menyebarkan aplikasi ke komputer lain agar siapapun bisa memakainya tanpa perlu menginstal Node.js:
 
 1. Siapkan file ikon berukuran 256x256 bernama `icon.ico` di folder utama.
 2. Jalankan perintah pembuat (*builder*):
    ```bash
    npm run build:win
    ```
-3. File eksekusi `Stena-Windows-1.0.0.exe` akan langsung jadi di dalam folder `dist/`. Aplikasi ini bersifat *portable*, tidak perlu instalasi, dan tidak meninggalkan jejak registry.
+3. File eksekusi `Stena-Windows-1.0.0.exe` akan langsung jadi di dalam folder `dist/`. 
+4. **Cara Membagikan:** Jika Anda ingin membagikan aplikasi ini, cukup berikan file `Stena-Windows-1.0.0.exe` tersebut *bersama* dengan file `API.txt` dan `BACA.txt` di dalam satu folder yang sama. Teman Anda tinggal mengisi API mereka di `API.txt` tanpa perlu menyentuh kode sama sekali.
 
 ---
 
