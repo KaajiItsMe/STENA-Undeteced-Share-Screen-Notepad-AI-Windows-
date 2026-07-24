@@ -14,20 +14,23 @@ Aplikasi ini didesain untuk berjalan di belakang layar secara rahasia (Stealth M
 3. Buka Tab AI Chat Cepat
    Tekan: Ctrl + Shift + A
 
+4. Simpan Teks Notepad Manual (Auto-save sudah aktif 1 detik)
+   Tekan: Ctrl + S
+
 --- SHORTCUT PINDAH POSISI (Hanya saat aplikasi terbuka) ---
-4. Geser Jendela ke Atas
+5. Geser Jendela ke Atas
    Tekan: Ctrl + Shift + Panah Atas
 
-5. Geser Jendela ke Bawah
+6. Geser Jendela ke Bawah
    Tekan: Ctrl + Shift + Panah Bawah
 
-6. Geser Jendela ke Kiri
+7. Geser Jendela ke Kiri
    Tekan: Ctrl + Shift + Panah Kiri
 
-7. Geser Jendela ke Kanan
+8. Geser Jendela ke Kanan
    Tekan: Ctrl + Shift + Panah Kanan
 
-8. Kembalikan Jendela ke Pojok Kanan Bawah (Reset Posisi)
+9. Kembalikan Jendela ke Pojok Kanan Bawah (Reset Posisi)
    Tekan: Ctrl + Shift + R
 
 --- JIKA SHORTCUT GAGAL ATAU ERROR ---

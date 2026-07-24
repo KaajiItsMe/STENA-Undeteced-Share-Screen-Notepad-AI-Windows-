@@ -62,7 +62,6 @@ Untuk menyebarkan aplikasi ke komputer lain agar siapapun bisa memakainya tanpa 
 ## ⌨️ Daftar Shortcut Rahasia
 
 - `Ctrl + Shift + B` : Menampilkan atau menyembunyikan (*toggle*) aplikasi secara penuh.
-- `Esc` : Tombol panik untuk menyembunyikan aplikasi secepat kilat.
 - `Ctrl + S` : Menyimpan teks Notepad secara manual (meski sistem auto-save juga sudah bekerja setiap 1 detik).
 
 ---
