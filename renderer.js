@@ -62,9 +62,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const chatResult = await window.stealthAPI.loadChat();
     if (chatResult.success && chatResult.chatData && chatResult.chatData.length > 0) {
         conversationHistory = chatResult.chatData;
-        chatMessages.innerHTML = '';
+        chatMessages.innerHTML = ''; 
         addMessage('👋 Halo lagi! Saya mengingat pembicaraan kita sebelumnya. Mari lanjutkan!', 'ai');
-
+        
         // Render semua history
         conversationHistory.forEach(msg => {
             if (msg.role === 'user') {
@@ -129,7 +129,7 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         window.stealthAPI.hideWindow();
     }
-
+    
     // Save manual (Ctrl+S)
     if ((e.metaKey || e.ctrlKey) && e.key === 's') {
         e.preventDefault();
@@ -202,7 +202,7 @@ async function sendChatMessage() {
 
         // Kirim ke AI
         const result = await window.stealthAPI.ai.chat(payload);
-
+        
         // Hapus loading
         loadingMsg.remove();
 
@@ -529,7 +529,7 @@ if (btnMic) {
                         }
                     }
                 });
-
+                
                 // Hentikan video track karena kita hanya butuh audio
                 systemStream.getVideoTracks().forEach(track => track.stop());
                 activeStreams.push(systemStream);
@@ -540,13 +540,13 @@ if (btnMic) {
                 // Mix menggunakan Web Audio API
                 audioContext = new AudioContext();
                 const dest = audioContext.createMediaStreamDestination();
-
+                
                 const micSource = audioContext.createMediaStreamSource(micStream);
                 const systemSource = audioContext.createMediaStreamSource(systemStream);
-
+                
                 micSource.connect(dest);
                 systemSource.connect(dest);
-
+                
                 finalStream = dest.stream;
             } else if (useMic) {
                 finalStream = micStream;
@@ -620,10 +620,10 @@ if (btnMic) {
             btnMic.classList.add('recording');
             btnMic.textContent = '⏹';
             btnMic.title = 'Klik lagi untuk stop & transkripsi';
-
-            let recMsg = useMic && useSystem ? 'Mic + Suara Sistem'
-                : useMic ? 'Mikrofon'
-                    : 'Suara Sistem';
+            
+            let recMsg = useMic && useSystem ? 'Mic + Suara Sistem' 
+                       : useMic ? 'Mikrofon' 
+                       : 'Suara Sistem';
             addMessage(`🔴 Sedang merekam (${recMsg})... Klik tombol ⏹ untuk stop.`, 'ai');
 
         } catch (err) {
