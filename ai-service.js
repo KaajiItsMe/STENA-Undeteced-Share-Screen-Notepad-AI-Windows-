@@ -30,7 +30,7 @@ for (const p of possiblePaths) {
 class AIService {
     constructor() {
         this.apiKey = process.env.GROQ_API_KEY;
-        this.model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+        this.model = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
         this.baseUrl = 'https://api.groq.com/openai/v1';
         this.maxTokens = 4096;
 
