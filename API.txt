@@ -34,4 +34,4 @@ GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
 #    - Konteks: 8K (Pendek)
 #    - Catatan: Sangat efisien, bagus jika Anda lebih menyukai gaya bahasa AI Google.
 # ==============================================================
-GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_MODEL=openai/gpt-oss-20b
