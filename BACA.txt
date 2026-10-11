@@ -45,8 +45,17 @@ Aplikasi ini didesain untuk berjalan di belakang layar secara rahasia (Stealth M
 - Anti-Screen Record & Anti-Share Screen: Jendela dan hover tombol tidak tertangkap di Zoom / Teams / Google Meet / OBS / Discord.
 - Tombol Salin Cepat: Tombol copy di pesan AI tanpa hover highlight yang mencurigakan.
 
---- PENGATURAN API (OPSIONAL) ---
-Jika ingin memakai API Key pribadi (9Router / Groq), silakan buka file "API.txt" dan masukkan kunci Anda. Jika dibiarkan kosong, aplikasi tetap berjalan normal menggunakan AI bawaan.
+--- CARA KONFIGURASI API PRIBADI (OPSIONAL) ---
+Secara default, aplikasi sudah langsung aktif dengan Google Gemini 3.8 Flash bawaan tanpa perlu setting apapun (Zero-Setup).
+Namun jika Anda ingin memakai API Key pribadi (9Router / Groq / OpenAI):
+1. Buka file "API.txt" menggunakan Notepad.
+2. Masukkan API Key Anda pada baris:
+   ROUTER_API_KEY=kunci_anda_disini
+   (Atau GROQ_API_KEY=... jika memakai Groq langsung).
+3. Anda juga dapat memilih model AI pada baris:
+   ROUTER_MODEL=ag/gemini-3.8-flash (atau claude, llama, gpt-oss, dll).
+4. Simpan file API.txt (Ctrl + S), lalu jalankan kembali aplikasinya.
+   Stena akan otomatis mendeteksi dan beralih ke pengaturan pribadi Anda!
 
 --- JIKA SHORTCUT GAGAL ATAU ERROR ---
 Terkadang, proses aplikasi lama mungkin masih berjalan tersembunyi (zombie process) di komputer Anda, sehingga membuat tombol shortcut tidak merespon saat aplikasi baru dibuka.

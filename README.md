@@ -49,11 +49,11 @@ Bagi Anda yang hanya ingin langsung memakai aplikasi tanpa perlu menginstal Node
 
 > 💡 **Aplikasi Portable (Tanpa Instalasi):** Aplikasi ini tidak meninggalkan jejak instalasi di registry Windows, Control Panel, maupun Start Menu. Jika shortcut tidak merespon karena ada sesi lama yang nyangkut di memori, cukup klik dua kali file **`fix.bat`** yang ada di dalam folder.
 
----
+## ⚙️ Panduan Konfigurasi API Mandiri (Opsional)
 
-## ⚙️ Konfigurasi API & Pengaturan Hemat Token
+Secara bawaan, aplikasi **sudah 100% aktif** dengan AI Google Gemini 3.8 Flash tanpa perlu mengisi konfigurasi apapun (*Zero-Setup*). 
 
-Stena membaca konfigurasi AI dari file **`API.txt`** (atau `.env`). Tersedia file template **`API.example.txt`** yang siap disalin menjadi `API.txt`:
+Namun jika Anda ingin menggunakan server pribadi, model khusus, atau API Key sendiri, Anda dapat menyesuaikan file **`API.txt`** (atau salin dari **`API.example.txt`**):
 
 ```env
 # ==============================================================
