@@ -36,6 +36,14 @@ Aplikasi ini didesain untuk berjalan di belakang layar secara rahasia (Stealth M
 10. Kembalikan Jendela ke Pojok Kanan Bawah (Reset Posisi)
     Tekan: Ctrl + Shift + R
 
+11. Sembunyikan / Tampilkan Simbol Kursor Ketik (Anti-Caret Flicker)
+    Tekan: Ctrl + Shift + C
+
+--- FITUR BARU v1.0.0 ---
+- Ekstrak Dokumen AI: Mendukung upload file PDF, Word (.docx, .doc), dan TXT via Drag & Drop atau klik tombol dokumen.
+- Anti-Screen Record & Anti-Share Screen: Jendela dan hover tombol tidak tertangkap di Zoom / Teams / Google Meet / OBS / Discord.
+- Tombol Salin Cepat: Tombol copy di pesan AI tanpa hover highlight yang mencurigakan.
+
 --- JIKA SHORTCUT GAGAL ATAU ERROR ---
 Terkadang, proses aplikasi lama mungkin masih berjalan tersembunyi (zombie process) di komputer Anda, sehingga membuat tombol shortcut tidak merespon saat aplikasi baru dibuka.
 
