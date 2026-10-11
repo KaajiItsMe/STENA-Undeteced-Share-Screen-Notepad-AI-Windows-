@@ -474,7 +474,38 @@ if (tabAi) {
 }
 
 // ==========================================
-// ⭐ BARU: SHORTCUT UNTUK AI (Ctrl+Shift+A)
+// ⭐ BARU: MODE KURSOR SILUMAN (Anti-Floating Caret)
+// ==========================================
+const btnToggleCaret = document.getElementById('btnToggleCaret');
+
+function setCaretMode(isNormal) {
+    if (isNormal) {
+        document.body.classList.add('visible-caret');
+        if (btnToggleCaret) {
+            btnToggleCaret.title = 'Kursor: Normal (Bisa tertangkap rekaman) [Ctrl+Shift+C]';
+        }
+    } else {
+        document.body.classList.remove('visible-caret');
+        if (btnToggleCaret) {
+            btnToggleCaret.title = 'Kursor: Siluman (Aman, tidak melayang di rekaman) [Ctrl+Shift+C]';
+        }
+    }
+}
+
+// Inisialisasi: default stealth (kursor tidak melayang)
+const savedCaretMode = localStorage.getItem('stena_caret_mode');
+setCaretMode(savedCaretMode === 'visible');
+
+if (btnToggleCaret) {
+    btnToggleCaret.addEventListener('click', () => {
+        const willBeNormal = !document.body.classList.contains('visible-caret');
+        setCaretMode(willBeNormal);
+        localStorage.setItem('stena_caret_mode', willBeNormal ? 'visible' : 'stealth');
+    });
+}
+
+// ==========================================
+// ⭐ BARU: SHORTCUT UNTUK AI (Ctrl+Shift+A) & KURSOR (Ctrl+Shift+C)
 // ==========================================
 document.addEventListener('keydown', (e) => {
     // Ctrl+Shift+A = Buka tab AI
@@ -488,6 +519,13 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         document.querySelector('[data-tab="notepad"]').click();
         noteInput.focus();
+    }
+    // Ctrl+Shift+C = Toggle Kursor Siluman / Normal
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        const willBeNormal = !document.body.classList.contains('visible-caret');
+        setCaretMode(willBeNormal);
+        localStorage.setItem('stena_caret_mode', willBeNormal ? 'visible' : 'stealth');
     }
 });
 

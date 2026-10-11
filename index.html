@@ -151,6 +151,26 @@
             font-family: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace;
             letter-spacing: 0.2px;
             width: 100%;
+            /* Mode Stealth: Hilangkan garis kedip dan kursor ketik agar tidak melayang di screen-share */
+            caret-color: transparent !important;
+            cursor: default !important;
+        }
+
+        .chat-input {
+            caret-color: transparent !important;
+            cursor: default !important;
+        }
+
+        /* Saat pengguna sengaja ingin menampilkan kursor biasa */
+        body.visible-caret .note-area,
+        body.visible-caret .chat-input {
+            caret-color: rgba(255, 255, 255, 0.9) !important;
+            cursor: text !important;
+        }
+
+        body.visible-caret #btnToggleCaret {
+            color: rgba(99, 102, 241, 0.9);
+            background: rgba(99, 102, 241, 0.2);
         }
 
         .note-area::placeholder {
@@ -527,6 +547,7 @@
         <div class="header">
             <span class="header-title">📝 Stena</span>
             <div class="header-actions">
+                <button class="btn" id="btnToggleCaret" title="Mode Kursor Siluman: Aktif (Kursor tidak melayang di rekaman) [Ctrl+Shift+C]">🛡️</button>
                 <button class="btn" id="btnMinimize" title="Minimize">─</button>
                 <button class="btn btn-close" id="btnClose" title="Close">✕</button>
             </div>
