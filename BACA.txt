@@ -40,9 +40,13 @@ Aplikasi ini didesain untuk berjalan di belakang layar secara rahasia (Stealth M
     Tekan: Ctrl + Shift + C
 
 --- FITUR BARU v1.0.0 ---
+- Siap Pakai Langsung (Zero-Setup): Sudah dilengkapi Google Gemini 3.8 Flash bawaan yang aktif otomatis tanpa perlu konfigurasi API Key!
 - Ekstrak Dokumen AI: Mendukung upload file PDF, Word (.docx, .doc), dan TXT via Drag & Drop atau klik tombol dokumen.
 - Anti-Screen Record & Anti-Share Screen: Jendela dan hover tombol tidak tertangkap di Zoom / Teams / Google Meet / OBS / Discord.
 - Tombol Salin Cepat: Tombol copy di pesan AI tanpa hover highlight yang mencurigakan.
+
+--- PENGATURAN API (OPSIONAL) ---
+Jika ingin memakai API Key pribadi (9Router / Groq), silakan buka file "API.txt" dan masukkan kunci Anda. Jika dibiarkan kosong, aplikasi tetap berjalan normal menggunakan AI bawaan.
 
 --- JIKA SHORTCUT GAGAL ATAU ERROR ---
 Terkadang, proses aplikasi lama mungkin masih berjalan tersembunyi (zombie process) di komputer Anda, sehingga membuat tombol shortcut tidak merespon saat aplikasi baru dibuka.
