@@ -247,7 +247,7 @@ function addMessage(text, type, rawContent = null) {
     if (type === 'ai' && !text.includes('⏳ Mengetik')) {
         const copyBtn = document.createElement('button');
         copyBtn.className = 'msg-copy-btn';
-        copyBtn.title = 'Salin jawaban ini (Copy)';
+        // Jangan gunakan .title agar Windows tidak memunculkan tooltip native yang melayang di rekaman
         copyBtn.innerHTML = '📋';
         copyBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
@@ -512,14 +512,8 @@ const btnToggleCaret = document.getElementById('btnToggleCaret');
 function setCaretMode(isNormal) {
     if (isNormal) {
         document.body.classList.add('visible-caret');
-        if (btnToggleCaret) {
-            btnToggleCaret.title = 'Kursor: Normal (Bisa tertangkap rekaman) [Ctrl+Shift+C]';
-        }
     } else {
         document.body.classList.remove('visible-caret');
-        if (btnToggleCaret) {
-            btnToggleCaret.title = 'Kursor: Siluman (Aman, tidak melayang di rekaman) [Ctrl+Shift+C]';
-        }
     }
 }
 
@@ -534,6 +528,12 @@ if (btnToggleCaret) {
         localStorage.setItem('stena_caret_mode', willBeNormal ? 'visible' : 'stealth');
     });
 }
+
+// ⭐ Anti-Native Tooltip: Hapus semua atribut title di seluruh DOM agar Windows tidak memunculkan popup melayang di rekaman
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[title]').forEach(el => el.removeAttribute('title'));
+});
+document.querySelectorAll('[title]').forEach(el => el.removeAttribute('title'));
 
 // ==========================================
 // ⭐ BARU: SHORTCUT UNTUK AI (Ctrl+Shift+A) & KURSOR (Ctrl+Shift+C)
