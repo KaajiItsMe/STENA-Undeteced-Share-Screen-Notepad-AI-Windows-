@@ -12,9 +12,11 @@ const exeDir = path.dirname(process.execPath);
 const portableDir = process.env.PORTABLE_EXECUTABLE_DIR; // Folder tempat .exe portable berada
 
 const possiblePaths = [
-    ...(portableDir ? [path.join(portableDir, 'API.txt')] : []),
+    ...(portableDir ? [path.join(portableDir, 'API.txt'), path.join(portableDir, 'API.example.txt')] : []),
     path.join(exeDir, 'API.txt'),
-    path.join(process.cwd(), 'API.txt')
+    path.join(exeDir, 'API.example.txt'),
+    path.join(process.cwd(), 'API.txt'),
+    path.join(process.cwd(), 'API.example.txt')
 ];
 
 for (const p of possiblePaths) {
