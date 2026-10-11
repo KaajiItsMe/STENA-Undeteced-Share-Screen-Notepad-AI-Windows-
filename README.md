@@ -31,10 +31,11 @@ Jika Anda ingin membongkar kode sumber aplikasi ini:
    ```bash
    npm install
    ```
-4. Aplikasi ini membutuhkan kunci AI untuk beroperasi. Anda cukup menggunakan file `API.txt` bawaan (atau buat file `.env` jika Anda lebih familier dengan standar Node.js) dan isi API Key dari Groq:
+4. Aplikasi ini membutuhkan konfigurasi AI untuk beroperasi. Anda cukup menggunakan file `API.txt` bawaan (atau buat file `.env` jika Anda lebih familier dengan standar Node.js) dan isi konfigurasi dari **9Router** (atau Groq):
    ```env
-   GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
-   GROQ_MODEL=llama-3.3-70b-versatile
+   ROUTER_BASE_URL=http://localhost:20128/v1
+   ROUTER_API_KEY=your_9router_api_key_here
+   ROUTER_MODEL=gpt-4o-mini
    ```
    *(Catatan: Baik menjalankan aplikasi dari source code (`npm start`) maupun dari file `.exe` portabel, aplikasi tetap dapat membaca kunci dari file `API.txt` yang berada di sebelahnya).*
 

@@ -232,11 +232,11 @@ ipcMain.handle('select-document', async (event) => {
     const result = dialog.showOpenDialogSync({
         properties: ['openFile'],
         filters: [
-            { name: '📄 All Supported Files', extensions: ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'txt', 'md', 'odt'] },
-            { name: '📕 PDF', extensions: ['pdf'] },
-            { name: '📘 Word', extensions: ['doc', 'docx'] },
-            { name: '📙 PowerPoint', extensions: ['ppt', 'pptx'] },
-            { name: '📝 Text', extensions: ['txt', 'md'] },
+            { name: '📄 Semua Dokumen Yang Didukung', extensions: ['pdf', 'docx', 'doc', 'pptx', 'ppt', 'txt', 'md', 'csv', 'json'] },
+            { name: '📕 Dokumen PDF (*.pdf)', extensions: ['pdf'] },
+            { name: '📘 Dokumen Word (*.docx, *.doc)', extensions: ['docx', 'doc'] },
+            { name: '📙 Dokumen PowerPoint (*.pptx, *.ppt)', extensions: ['pptx', 'ppt'] },
+            { name: '📝 Dokumen Teks (*.txt, *.md, *.csv, *.json)', extensions: ['txt', 'md', 'csv', 'json'] },
         ],
     });
     return result;

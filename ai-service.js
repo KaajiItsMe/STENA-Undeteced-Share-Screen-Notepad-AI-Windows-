@@ -29,15 +29,73 @@ for (const p of possiblePaths) {
 
 class AIService {
     constructor() {
-        this.apiKey = process.env.GROQ_API_KEY;
-        this.model = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
-        this.baseUrl = 'https://api.groq.com/openai/v1';
-        this.maxTokens = 4096;
+        // Cek apakah murni menggunakan Groq tanpa 9Router
+        const isGroqOnly = process.env.GROQ_API_KEY && !process.env.ROUTER_API_KEY && !process.env.API_KEY && !process.env.ROUTER_BASE_URL;
 
-        // Cek apakah API Key ada
-        if (!this.apiKey || this.apiKey.includes('gsk_xxxx')) {
-            console.warn('⚠️ GROQ_API_KEY tidak valid atau belum diatur di API.txt');
+        // Base URL 9Router (default lokal: http://localhost:20128/v1) atau Groq
+        const rawBaseUrl = process.env.ROUTER_BASE_URL || process.env.API_BASE_URL || (isGroqOnly ? 'https://api.groq.com/openai/v1' : 'http://localhost:20128/v1');
+        this.baseUrl = rawBaseUrl.replace(/\/+$/, '');
+
+        // API Key (bisa kosong jika 9Router lokal tanpa autentikasi)
+        this.apiKey = process.env.ROUTER_API_KEY || process.env.API_KEY || process.env.GROQ_API_KEY || '';
+
+        // Model AI
+        this.model = process.env.ROUTER_MODEL || process.env.AI_MODEL || process.env.GROQ_MODEL || (isGroqOnly ? 'llama-3.3-70b-versatile' : 'gpt-4o-mini');
+
+        // Parameter token & konteks hemat
+        this.maxTokens = parseInt(process.env.MAX_TOKENS, 10) || 2048;
+        this.maxHistoryMessages = parseInt(process.env.MAX_HISTORY_MESSAGES, 10) || 6;
+        this.maxContextChars = parseInt(process.env.MAX_CONTEXT_CHARS, 10) || 12000;
+
+        if (this.apiKey.includes('your_') || this.apiKey.includes('gsk_xxxx')) {
+            console.warn('⚠️ API Key belum diatur dengan benar di API.txt');
         }
+    }
+
+    // ============================================
+    // OPTIMASI PESAN (HEMAT TOKEN / SLIDING WINDOW)
+    // ============================================
+    optimizeMessages(messages) {
+        if (!Array.isArray(messages) || messages.length === 0) return messages;
+
+        // Pisahkan system message (instruksi awal) dari percakapan
+        const systemMessages = messages.filter(m => m.role === 'system');
+        const chatMessages = messages.filter(m => m.role !== 'system');
+
+        // 1. Sliding Window: Ambil N pesan percakapan terakhir saja
+        let trimmedChat = chatMessages.slice(-this.maxHistoryMessages);
+
+        // 2. Pemangkasan lampiran dokumen lama:
+        // Jika ada pesan lama yang memuat teks dokumen panjang (misal 6000 karakter),
+        // pangkas isi dokumennya dan sisakan pertanyaannya saja, kecuali jika itu pesan user paling akhir.
+        trimmedChat = trimmedChat.map((msg, index) => {
+            const isLastMessage = (index === trimmedChat.length - 1);
+            if (!isLastMessage && msg.role === 'user' && typeof msg.content === 'string') {
+                if (msg.content.includes('ℹ️ Dokumen terlampir:')) {
+                    const parts = msg.content.split('\n\n---\n');
+                    const question = parts.length > 1 ? parts.slice(1).join('\n\n---\n') : msg.content;
+                    const docHeader = msg.content.match(/ℹ️ Dokumen terlampir:[^\n]+/);
+                    const docTitle = docHeader ? docHeader[0] : 'Dokumen terlampir';
+                    return {
+                        role: 'user',
+                        content: `[Lampiran sebelumnya: ${docTitle} (konten dokumen diringkas untuk hemat token)]\n\n${question}`
+                    };
+                }
+            }
+            return msg;
+        });
+
+        // 3. Karakter budget cap: Jika total karakter masih melebihi batas aman,
+        // buang pesan yang paling lama satu per satu.
+        let totalChars = trimmedChat.reduce((sum, m) => sum + (m.content ? m.content.length : 0), 0);
+        while (trimmedChat.length > 2 && totalChars > this.maxContextChars) {
+            const removed = trimmedChat.shift();
+            if (removed && removed.content) {
+                totalChars -= removed.content.length;
+            }
+        }
+
+        return [...systemMessages, ...trimmedChat];
     }
 
     // ============================================
@@ -45,20 +103,23 @@ class AIService {
     // ============================================
     async chat(messages) {
         try {
+            const optimizedMessages = this.optimizeMessages(messages);
+            const headers = {
+                'Content-Type': 'application/json',
+            };
+            if (this.apiKey) {
+                headers['Authorization'] = `Bearer ${this.apiKey}`;
+            }
+
             const response = await axios.post(
                 `${this.baseUrl}/chat/completions`,
                 {
                     model: this.model,
-                    messages: messages,
+                    messages: optimizedMessages,
                     max_tokens: this.maxTokens,
                     temperature: 0.7,
                 },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${this.apiKey}`,
-                        'Content-Type': 'application/json',
-                    }
-                }
+                { headers }
             );
 
             return {
@@ -67,7 +128,7 @@ class AIService {
                 usage: response.data.usage
             };
         } catch (error) {
-            console.error('❌ Groq Error:', error.response?.data || error.message);
+            console.error('❌ AI Router Error:', error.response?.data || error.message);
             return {
                 success: false,
                 error: error.response?.data?.error?.message || error.message
@@ -215,14 +276,24 @@ class AIService {
             form.append('temperature', '0.0'); // Mengurangi halusinasi
             form.append('prompt', 'Berikut adalah transkripsi rekaman suara atau percakapan:'); // Memberi konteks agar tidak berhalusinasi
 
+            // Jika ada GROQ_API_KEY terpisah, gunakan Groq Whisper langsung yang gratis & cepat
+            const whisperUrl = (process.env.GROQ_API_KEY && !this.baseUrl.includes('api.groq.com'))
+                ? 'https://api.groq.com/openai/v1/audio/transcriptions'
+                : `${this.baseUrl}/audio/transcriptions`;
+            const whisperKey = (process.env.GROQ_API_KEY && !this.baseUrl.includes('api.groq.com'))
+                ? process.env.GROQ_API_KEY
+                : this.apiKey;
+
+            const headers = { ...form.getHeaders() };
+            if (whisperKey) {
+                headers['Authorization'] = `Bearer ${whisperKey}`;
+            }
+
             const response = await axios.post(
-                `${this.baseUrl}/audio/transcriptions`,
+                whisperUrl,
                 form,
                 {
-                    headers: {
-                        'Authorization': `Bearer ${this.apiKey}`,
-                        ...form.getHeaders()
-                    },
+                    headers,
                     maxBodyLength: Infinity
                 }
             );

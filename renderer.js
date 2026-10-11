@@ -182,22 +182,33 @@ async function sendChatMessage() {
         : userMessage;
     addMessage(displayMessage, 'user');
     chatInput.value = '';
-    btnSendChat.disabled = true;
+    // Bersihkan chip dokumen setelah dilampirkan ke pesan ini
+    // agar chat berikutnya tidak terus-menerus menempelkan dokumen ribuan karakter ini
+    if (documentContext) {
+        clearDocChip();
+    }
 
-    // Simpan ke riwayat
+    // Simpan ke riwayat visual
     conversationHistory.push({ role: 'user', content: messageToSend });
+    if (conversationHistory.length > 40) {
+        conversationHistory = conversationHistory.slice(-40);
+    }
     await window.stealthAPI.saveChat(conversationHistory);
 
     // Tampilkan loading
     const loadingMsg = addMessage('⏳ Mengetik...', 'ai');
 
     try {
+        // Ambil riwayat percakapan terbaru saja (maksimal 6 pesan = 3 putaran tanya jawab)
+        // Ini menjaga agar prompt tidak kehabisan batas token API
+        const recentHistory = conversationHistory.slice(-6);
+
         const payload = [
             {
                 role: 'system',
-                content: `Kamu adalah asisten AI yang ramah dan membantu. Kamu bisa menjawab pertanyaan tentang apa saja — mulai dari teknologi, kehidupan sehari-hari, sampai tugas sekolah/kuliah. Jawab dengan bahasa Indonesia yang natural dan mudah dipahami.`
+                content: `Kamu adalah asisten AI yang ramah, ringkas, dan membantu. Jawab dengan bahasa Indonesia yang natural, padat, dan jelas untuk menghemat token.`
             },
-            ...conversationHistory
+            ...recentHistory
         ];
 
         // Kirim ke AI
@@ -210,6 +221,9 @@ async function sendChatMessage() {
             addMessage(renderMarkdown(result.content), 'ai');
             // Simpan jawaban AI ke riwayat
             conversationHistory.push({ role: 'assistant', content: result.content });
+            if (conversationHistory.length > 40) {
+                conversationHistory = conversationHistory.slice(-40);
+            }
             await window.stealthAPI.saveChat(conversationHistory);
         } else {
             addMessage(`❌ Error: ${result.error}`, 'ai');
@@ -378,6 +392,35 @@ btnRemoveDoc.addEventListener('click', () => {
     addMessage('ℹ️ Dokumen dihapus dari konteks.', 'ai');
 });
 
+// Helper fungsi utama untuk memproses dokumen (bisa via tombol upload atau drag-and-drop)
+async function processDocumentFile(filePath) {
+    if (!filePath) return;
+    const fileName = filePath.split(/[\\/]/).pop();
+
+    document.querySelector('[data-tab="ai"]').click();
+    const loadingMsg = addMessage(`⏳ Membaca ${fileName}...`, 'ai');
+
+    try {
+        const result = await window.stealthAPI.extractDocument(filePath);
+        loadingMsg.remove();
+
+        if (result.success) {
+            // Simpan konteks dokumen
+            documentContext = { text: result.text, fileName };
+            showDocChip(fileName);
+            addMessage(
+                `✅ <strong>${fileName}</strong> siap (${result.text.length.toLocaleString()} karakter). Ketik pertanyaan atau perintahmu di bawah!`,
+                'ai'
+            );
+        } else {
+            addMessage(`❌ Gagal membaca dokumen: ${result.error}`, 'ai');
+        }
+    } catch (error) {
+        loadingMsg.remove();
+        addMessage(`❌ Error: ${error.message}`, 'ai');
+    }
+}
+
 const btnExtractDoc = document.getElementById('btnExtractDoc');
 
 if (btnExtractDoc) {
@@ -386,43 +429,47 @@ if (btnExtractDoc) {
         try {
             files = await window.stealthAPI.selectDocument();
         } catch (error) {
-            addMessage(`❌ Gagal membuka dialog: ${error.message}`, 'ai');
+            addMessage(`❌ Gagal membuka dialog file: ${error.message}`, 'ai');
             return;
         }
 
         if (!files || files.length === 0) return;
 
-        const filePath = files[0];
-        const fileName = filePath.split(/[\\/]/).pop();
         btnExtractDoc.disabled = true;
-
-        document.querySelector('[data-tab="ai"]').click();
-        const loadingMsg = addMessage(`⏳ Membaca ${fileName}...`, 'ai');
-
-        try {
-            const result = await window.stealthAPI.extractDocument(filePath);
-            loadingMsg.remove();
-
-            if (result.success) {
-                // ⭐ Simpan konteks, TIDAK paste ke input
-                documentContext = { text: result.text, fileName };
-
-                // Tampilkan chip
-                showDocChip(fileName);
-
-                addMessage(
-                    `✅ <strong>${fileName}</strong> siap (${result.text.length.toLocaleString()} karakter). Ketik perintahmu di bawah!`,
-                    'ai'
-                );
-            } else {
-                addMessage(`❌ Gagal baca: ${result.error}`, 'ai');
-            }
-        } catch (error) {
-            loadingMsg.remove();
-            addMessage(`❌ Error: ${error.message}`, 'ai');
-        }
-
+        await processDocumentFile(files[0]);
         btnExtractDoc.disabled = false;
+    });
+}
+
+// ⭐ Dukungan Drag & Drop Dokumen ke area AI Chat
+const tabAi = document.getElementById('tab-ai');
+if (tabAi) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+        tabAi.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            tabAi.style.outline = '2px dashed rgba(99, 102, 241, 0.7)';
+            tabAi.style.outlineOffset = '-4px';
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        tabAi.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            tabAi.style.outline = '';
+            tabAi.style.outlineOffset = '';
+        });
+    });
+
+    tabAi.addEventListener('drop', async (e) => {
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            if (file.path) {
+                await processDocumentFile(file.path);
+            }
+        }
     });
 }
 

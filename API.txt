@@ -1,37 +1,42 @@
 # ==============================================================
-# KONFIGURASI API KEY GROQ (WAJIB)
-# Ganti teks di bawah ini dengan API Key milik Anda dari Groq.
+# KONFIGURASI 9ROUTER / OPENAI-COMPATIBLE API
 # ==============================================================
-GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
+# 1. Base URL 9Router
+#    - Default lokal 9Router: http://localhost:20128/v1
+#    - Jika menggunakan VPS/Cloud/Proxy lain, sesuaikan alamat URL-nya.
+ROUTER_BASE_URL=http://94.237.65.223/v1
+
+# 2. API Key 9Router
+#    - Masukkan API Key dari dashboard 9Router Anda (atau biarkan jika lokal tanpa auth).
+ROUTER_API_KEY=MASUKKAN_API_KEY_DISINI
+
+# 3. Pilihan Model AI pada 9Router
+#    Model yang tersedia di server Anda:
+#    - ag/gemini-3.8-flash (Default Flash 3.8)
+#    - ag/gemini-3.8-flash-medium
+#    - ag/gemini-3.8-flash-high
+#    - ag/claude-sonnet-4-6
+#    - ag/claude-opus-4-6-thinking
+#    - ag/gpt-oss-120b-medium
+ROUTER_MODEL=ag/gemini-3.8-flash
 
 # ==============================================================
-# PILIHAN OTAK AI (GROQ MODEL)
-# Silakan pilih model yang ingin digunakan dengan mengubah teks pada GROQ_MODEL.
-#
-# DAFTAR MODEL YANG TERSEDIA:
-#
-# 1. llama-3.3-70b-versatile (DEFAULT / DIREKOMENDASIKAN)
-#    - Performa: ⭐⭐⭐⭐⭐ (Sangat Pintar, setara GPT-4)
-#    - Kecepatan: ⭐⭐⭐⭐ (Cepat)
-#    - Konteks: 128K (Bisa mengingat percakapan yang sangat amat panjang / dokumen besar)
-#    - Catatan: Paling mantap untuk tugas kuliah, coding, atau analisis rumit.
-#
-# 2. llama-3.1-8b-instant
-#    - Performa: ⭐⭐⭐ (Standar Llama 3)
-#    - Kecepatan: ⭐⭐⭐⭐⭐ (Sangat Kilat)
-#    - Konteks: 128K (Konteks tetap panjang)
-#    - Catatan: Hemat token/kuota. Cocok untuk tanya-jawab ringan dan cepat.
-#
-# 3. mixtral-8x7b-32768
-#    - Performa: ⭐⭐⭐⭐ (Sangat Bagus)
-#    - Kecepatan: ⭐⭐⭐⭐⭐ (Kilat)
-#    - Konteks: 32K (Sedang)
-#    - Catatan: Alternatif cerdas selain Llama, hemat memori dengan model campuran (MoE).
-#
-# 4. gemma2-9b-it
-#    - Performa: ⭐⭐⭐ (Buatan Google)
-#    - Kecepatan: ⭐⭐⭐⭐ (Cepat)
-#    - Konteks: 8K (Pendek)
-#    - Catatan: Sangat efisien, bagus jika Anda lebih menyukai gaya bahasa AI Google.
+# PENGATURAN HEMAT TOKEN (AGAR TIDAK OVER-LIMIT)
 # ==============================================================
-GROQ_MODEL=openai/gpt-oss-20b
+# Jumlah pesan percakapan terakhir yang dikirim ke AI sebagai konteks.
+# Nilai 6 = 3 putaran tanya-jawab terakhir (Sliding Window).
+# Pesan yang lebih lama tidak akan dikirim sehingga prompt tetap ringkas!
+MAX_HISTORY_MESSAGES=6
+
+# Batas maksimal total karakter percakapan (default: 12000 karakter ~ 3000 token).
+MAX_CONTEXT_CHARS=12000
+
+# Batas maksimal panjang token respon/jawaban AI (default: 2048).
+MAX_TOKENS=2048
+
+# ==============================================================
+# (OPSIONAL) GROQ DIRECT FALLBACK
+# Jika Anda tetap ingin memakai Groq secara langsung tanpa 9Router:
+# GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
+# GROQ_MODEL=llama-3.3-70b-versatile
+# ==============================================================
