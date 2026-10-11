@@ -1,79 +1,141 @@
 # 📝 Stena (Stealth Notepad AI)
 
-Stena adalah aplikasi Notepad pintar yang dirancang khusus dengan fitur **Stealth Mode**. Secara kasat mata, aplikasi ini berfungsi seperti Notepad biasa untuk menulis catatan, namun dilengkapi dengan kemampuan asisten AI yang tidak terdeteksi oleh aplikasi berbagi layar (seperti Zoom, Google Meet, OBS, atau Discord). 
+Stena adalah aplikasi Notepad pintar yang dirancang khusus dengan fitur **Stealth Mode**. Secara kasat mata, aplikasi ini berfungsi seperti Notepad biasa untuk menulis catatan, namun dilengkapi dengan kemampuan asisten AI yang **100% tidak terdeteksi** oleh aplikasi berbagi layar maupun perekam layar (seperti Zoom, Google Meet, Microsoft Teams, OBS, atau Discord). 
 
-Stena dibangun menggunakan **Electron** dan terintegrasi dengan ekosistem AI gratis dan super cepat dari **Groq**, memungkinkannya untuk menjawab pertanyaan akademis, menganalisis dokumen, hingga melakukan transkripsi suara secara instan tanpa ketahuan.
+Stena dibangun menggunakan **Electron** dan terintegrasi dengan arsitektur **9Router / OpenAI-Compatible API** (dengan model default super cerdas **Gemini 3.8 Flash**, Claude, GPT-OSS) serta mendukung fallback langsung ke **Groq**. Aplikasi ini memungkinkan Anda untuk menjawab soal akademis, menganalisis dokumen tugas, hingga melakukan transkripsi suara secara instan tanpa ketahuan saat presentasi atau meeting online.
 
 ---
 
 ## ✨ Fitur Unggulan
 
-1. **🕵️‍♂️ Mode Siluman (Stealth Mode)**
-   - Tidak muncul di *Taskbar* maupun layar Alt+Tab.
-   - Tidak akan tertangkap oleh *Screen Sharing* (layar Anda terlihat kosong/menembus di aplikasi Zoom atau OBS).
-2. **🤖 Asisten AI Terintegrasi (Powered by Groq)**
-   - Ngobrol langsung dengan model canggih seperti **Llama 3.3** atau **Mixtral** secara gratis.
-   - AI memiliki "ingatan panjang" berkat sistem riwayat obrolan (Chat History) lokal.
-3. **🎙️ Perekam & Ekstraksi Suara (Whisper)**
-   - Mampu mereka suara sistem/mikrofon dan secara otomatis mengubah obrolan/dosen menjadi teks (transkripsi) agar langsung bisa ditanyakan ke AI.
-4. **📄 Pembaca Dokumen (PDF & DOCX)**
-   - Membaca dokumen tugas, materi kuliah, atau jurnal hanya dalam satu kali klik.
+1. **🕵️‍♂️ Mode Siluman Total (Stealth Mode)**
+   - Tidak muncul di *Taskbar* maupun menu `Alt + Tab`.
+   - Jendela aplikasi otomatis tembus pandang saat *Screen Sharing* (layar Anda terlihat kosong/bersih di Zoom, Meet, Teams, atau rekaman OBS).
+2. **🛡️ Bebas Bocor Visual (Anti-Leak Protection)**
+   - **Anti-Caret Flicker (`Ctrl + Shift + C`)**: Menyembunyikan simbol kursor ketik (`|`) agar tidak berkedip atau melayang di rekaman layar penonton saat mengetik.
+   - **Bebas Hover Artifacts**: Tombol salin jawaban AI (`📋`) dan elemen UI tidak memunculkan tooltip native OS atau kotak seleksi biru yang mencurigakan saat kursor diarahkan.
+3. **🤖 Asisten AI Canggih & Multi-Model (9Router / Groq)**
+   - Default menggunakan model **Gemini 3.8 Flash** (`ag/gemini-3.8-flash`) yang cepat dan cerdas.
+   - Mendukung model Claude 3.7 / Sonnet / Opus, GPT-OSS, atau Groq Llama 3.3.
+4. **⚡ Pengaturan Hemat Token Otomatis (Anti Over-Limit)**
+   - Dilengkapi algoritma **Sliding Window** context pruning: memangkas riwayat chat lawas dan lampiran dokumen besar secara otomatis sehingga tidak boros token dan bebas error batas konteks (*token limit*).
+5. **📄 Ekstraksi Dokumen Cerdas (PDF, Word, TXT)**
+   - Mendukung fitur **Drag & Drop** file PDF, Word (`.docx`, `.doc`), dan `.txt` langsung ke dalam jendela AI Chat.
+   - Dilengkapi *fallback stream decompressor* mandiri sehingga pembacaan PDF tetap lancar tanpa ketergantungan library DOM eksternal.
+6. **📋 1-Klik Salin Jawaban AI**
+   - Tombol salin cepat `📋` pada setiap pesan AI untuk menyalin langsung ke clipboard tanpa repot memblok teks secara manual.
+7. **🎙️ Perekam & Ekstraksi Suara (Whisper)**
+   - Merekam suara sistem / mikrofon dan mengubah percakapan rapat atau dosen menjadi teks secara instan.
+
+---
+
+## ⚙️ Konfigurasi API & Pengaturan Hemat Token
+
+Stena membaca konfigurasi AI dari file **`API.txt`** (atau `.env`). Tersedia file template **`API.example.txt`** yang siap disalin menjadi `API.txt`:
+
+```env
+# ==============================================================
+# 1. KONFIGURASI 9ROUTER / OPENAI-COMPATIBLE API
+# ==============================================================
+# Alamat server 9Router (bisa VPS cloud atau lokal http://localhost:20128/v1)
+ROUTER_BASE_URL=http://94.237.65.223/v1
+
+# Masukkan API Key 9Router Anda
+ROUTER_API_KEY=your_api_key_here
+
+# Pilihan Model AI pada 9Router:
+# - ag/gemini-3.8-flash (Default / Sangat Cepat & Pintar)
+# - ag/gemini-3.8-flash-medium
+# - ag/claude-sonnet-4-6
+# - ag/claude-opus-4-6-thinking
+# - ag/gpt-oss-120b-medium
+ROUTER_MODEL=ag/gemini-3.8-flash
+
+# ==============================================================
+# 2. PENGATURAN HEMAT TOKEN (AGAR TIDAK OVER-LIMIT)
+# ==============================================================
+# Jumlah pesan riwayat terakhir yang dikirim ke AI sebagai konteks (Sliding Window).
+# Nilai 6 = 3 putaran tanya-jawab terakhir. Pesan lebih lama otomatis dipangkas.
+MAX_HISTORY_MESSAGES=6
+
+# Batas maksimal total karakter percakapan yang dikirim (default: 12000 karakter ~ 3000 token).
+MAX_CONTEXT_CHARS=12000
+
+# Batas maksimal panjang token untuk balasan / respon AI (default: 2048 token).
+MAX_TOKENS=2048
+
+# ==============================================================
+# 3. (OPSIONAL) GROQ DIRECT FALLBACK
+# Jika ingin memakai Groq secara langsung tanpa 9Router:
+# GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
+# GROQ_MODEL=llama-3.3-70b-versatile
+# ==============================================================
+```
+
+> **Catatan Keamanan:** File `API.txt` sudah dimasukkan ke `.gitignore` sehingga API Key pribadi Anda tidak akan pernah terunggah ke repositori GitHub.
 
 ---
 
 ## 🚀 Panduan Instalasi (Development)
 
-Jika Anda ingin membongkar kode sumber aplikasi ini:
+Jika Anda ingin menjalankan atau mengembangkan kode sumber aplikasi ini:
 
-1. Pastikan **Node.js** sudah terinstal di komputer Anda.
-2. *Clone* repositori ini ke komputer lokal Anda.
-3. Buka Terminal/CMD di dalam folder proyek ini, dan jalankan perintah:
+1. Pastikan **Node.js** (v18+) sudah terinstal di komputer Anda.
+2. *Clone* repositori ini:
+   ```bash
+   git clone https://github.com/KaajiItsMe/STENA-Undeteced-Share-Screen-Notepad-AI-Windows-.git
+   cd STENA-Undeteced-Share-Screen-Notepad-AI-Windows-
+   ```
+3. Instal dependensi:
    ```bash
    npm install
    ```
-4. Aplikasi ini membutuhkan konfigurasi AI untuk beroperasi. Anda cukup menggunakan file `API.txt` bawaan (atau buat file `.env` jika Anda lebih familier dengan standar Node.js) dan isi konfigurasi dari **9Router** (atau Groq):
-   ```env
-   ROUTER_BASE_URL=http://localhost:20128/v1
-   ROUTER_API_KEY=your_9router_api_key_here
-   ROUTER_MODEL=gpt-4o-mini
+4. Salin file template `API.example.txt` menjadi `API.txt`, lalu masukkan API Key Anda:
+   ```bash
+   copy API.example.txt API.txt
    ```
-   *(Catatan: Baik menjalankan aplikasi dari source code (`npm start`) maupun dari file `.exe` portabel, aplikasi tetap dapat membaca kunci dari file `API.txt` yang berada di sebelahnya).*
-
-5. Untuk menjalankan aplikasi di tahap pengembangan (*development*):
+5. Jalankan aplikasi:
    ```bash
    npm start
    ```
 
 ---
 
-## 📦 Membangun Versi Portable (.exe)
+## 📦 Membangun Versi Portable (.exe / .zip)
 
-Untuk menyebarkan aplikasi ke komputer lain agar siapapun bisa memakainya tanpa perlu menginstal Node.js:
+Untuk membuat file aplikasi siap pakai (*standalone / portable*) tanpa memerlukan instalasi Node.js:
 
-1. Siapkan file ikon berukuran 256x256 bernama `icon.ico` di folder utama.
-2. Jalankan perintah pembuat (*builder*):
+1. Jalankan perintah kompilasi:
    ```bash
    npm run build:win
    ```
-3. File eksekusi `Stena-Windows-1.0.0.exe` akan langsung jadi di dalam folder `dist/`. 
-4. **Cara Membagikan:** Jika Anda ingin membagikan aplikasi ini, cukup berikan file `Stena-Windows-1.0.0.exe` tersebut *bersama* dengan file `API.txt` dan `BACA.txt` di dalam satu folder yang sama. Teman Anda tinggal mengisi API mereka di `API.txt` tanpa perlu menyentuh kode sama sekali.
+2. File eksekusi `Stena-Windows-1.0.0.exe` akan berada di folder `dist/`.
+3. **Cara Membagikan:** Bagikan file zip yang berisi `Stena-Windows-1.0.0.exe`, `API.txt`, `BACA.txt`, dan `fix.bat`. Pengguna cukup mengekstrak dan menjalankan `.exe` tanpa instalasi apapun.
 
 ---
 
 ## ⌨️ Daftar Shortcut Rahasia
 
-- `Ctrl + Shift + B` : Menampilkan atau menyembunyikan (*toggle*) aplikasi secara penuh.
-- `Ctrl + Shift + N` : Berpindah cepat ke tab Notepad.
-- `Ctrl + Shift + A` : Berpindah cepat ke tab AI Chat.
-- `Ctrl + S` : Menyimpan teks Notepad secara manual (sistem auto-save juga bekerja setiap 1 detik).
-- `Esc` : Tombol panik (*Panic Button*) untuk menyembunyikan aplikasi secepat kilat.
+| Shortcut | Fungsi |
+| :--- | :--- |
+| `Ctrl + Shift + B` | Buka / Sembunyikan Aplikasi (Boss Key) |
+| `Ctrl + Shift + N` | Buka Tab Notepad Cepat |
+| `Ctrl + Shift + A` | Buka Tab AI Chat Cepat |
+| `Ctrl + Shift + C` | Toggle Sembunyikan Simbol Kursor Ketik (Anti-Caret Flicker) |
+| `Ctrl + S` | Simpan Teks Notepad Manual (Auto-save juga aktif tiap 1 detik) |
+| `Esc` | Tombol Panik (*Panic Button*) untuk menutup seketika |
+| `Ctrl + Shift + Panah Atas` | Geser Jendela ke Atas |
+| `Ctrl + Shift + Panah Bawah` | Geser Jendela ke Bawah |
+| `Ctrl + Shift + Panah Kiri` | Geser Jendela ke Kiri |
+| `Ctrl + Shift + Panah Kanan` | Geser Jendela ke Kanan |
+| `Ctrl + Shift + R` | Reset Posisi Jendela ke Pojok Kanan Bawah |
 
-**Shortcut Pindah Posisi (Saat Aplikasi Terbuka):**
-- `Ctrl + Shift + Panah Atas` : Geser Jendela ke Atas
-- `Ctrl + Shift + Panah Bawah` : Geser Jendela ke Bawah
-- `Ctrl + Shift + Panah Kiri` : Geser Jendela ke Kiri
-- `Ctrl + Shift + Panah Kanan` : Geser Jendela ke Kanan
-- `Ctrl + Shift + R` : Kembalikan Jendela ke Pojok Kanan Bawah (Reset Posisi)
+---
+
+## 🛠️ Pemecahan Masalah (Troubleshooting)
+
+- **Shortcut Tidak Merespon:**
+  Terkadang proses aplikasi sebelumnya masih berjalan di memori (*zombie process*). Cukup jalankan file `fix.bat` di folder aplikasi untuk mematikan semua proses nyangkut, lalu buka kembali aplikasinya.
 
 ---
 
