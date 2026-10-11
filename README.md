@@ -139,4 +139,12 @@ Untuk membuat file aplikasi siap pakai (*standalone / portable*) tanpa memerluka
 
 ---
 
-**Dibuat dengan 💻 oleh Eka Aji Pramudia. UNM (2026)**
+## 🌟 Credits & Acknowledgements
+
+- **Developer**: Eka Aji Pramudia (UNM - 2026)
+- **AI Pair Programmer**: Google DeepMind **Antigravity** (Advanced Agentic AI Assistant)
+
+---
+
+**Dibuat dengan 💻 & ❤️ oleh Eka Aji Pramudia. UNM (2026)**
+
