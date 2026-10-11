@@ -33,8 +33,11 @@ Stena dibangun menggunakan **Electron** dan terintegrasi dengan arsitektur **9Ro
 
 Bagi Anda yang hanya ingin langsung memakai aplikasi tanpa perlu menginstal Node.js atau menyentuh kode program:
 
-1. **Unduh Versi Portable:**  
-   Buka menu [**Releases**](https://github.com/KaajiItsMe/STENA-Undeteced-Share-Screen-Notepad-AI-Windows-/releases) di repositori ini, lalu unduh file **`Stena-Windows-1.0.0.zip`**.
+> ### 📥 **[KLIK DI SINI UNTUK DOWNLOAD LANGSUNG (Stena-Windows-1.0.0.zip)](https://github.com/KaajiItsMe/STENA-Undeteced-Share-Screen-Notepad-AI-Windows-/releases/download/v1.0.0/Stena-Windows-1.0.0.zip)**  
+> *(Atau lihat seluruh riwayat versi di halaman [GitHub Releases](https://github.com/KaajiItsMe/STENA-Undeteced-Share-Screen-Notepad-AI-Windows-/releases))*
+
+1. **Unduh File ZIP:**  
+   Klik tombol download di atas untuk mengunduh paket **`Stena-Windows-1.0.0.zip`**.
 2. **Ekstrak File ZIP:**  
    Klik kanan file zip hasil unduhan, lalu ekstrak (*Extract All*) ke folder mana saja di komputer Anda.
 3. **Masukkan API Key:**  
