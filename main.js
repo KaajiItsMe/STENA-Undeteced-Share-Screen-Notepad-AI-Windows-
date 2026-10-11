@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, screen, ipcMain, dialog, desktopCapturer } = require('electron');
+const { app, BrowserWindow, globalShortcut, screen, ipcMain, dialog, desktopCapturer, clipboard } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -240,6 +240,12 @@ ipcMain.handle('select-document', async (event) => {
         ],
     });
     return result;
+});
+
+// --- Salin Teks ke Clipboard ---
+ipcMain.handle('copy-text', async (event, text) => {
+    clipboard.writeText(text || '');
+    return true;
 });
 
 // --- Transkripsi Audio (Groq Whisper) ---

@@ -211,7 +211,18 @@
             border-radius: 10px;
         }
 
+        /* Area teks BISA diseleksi dan disalin (Ctrl + C) */
+        .note-area,
+        .chat-messages,
+        .message,
+        .message *,
+        .chat-input {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+
         .message {
+            position: relative;
             max-width: 85%;
             padding: 8px 14px;
             border-radius: 12px;
@@ -231,6 +242,43 @@
             align-self: flex-start;
             background: rgba(255, 255, 255, 0.06);
             color: rgba(255, 255, 255, 0.85);
+            padding-right: 32px;
+        }
+
+        /* Tombol Salin Cepat di Pesan AI */
+        .msg-copy-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .message.ai:hover .msg-copy-btn {
+            opacity: 1;
+        }
+
+        .msg-copy-btn:hover {
+            background: rgba(99, 102, 241, 0.4);
+            color: #ffffff;
+        }
+
+        .msg-copy-btn.copied {
+            opacity: 1;
+            background: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+            border-color: rgba(74, 222, 128, 0.5);
         }
 
         .message .code-block {

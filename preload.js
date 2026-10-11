@@ -51,6 +51,7 @@ contextBridge.exposeInMainWorld('stealthAPI', {
     },
     extractDocument: (filePath) => ipcRenderer.invoke('extract-document', filePath),
     selectDocument: () => ipcRenderer.invoke('select-document'),
+    copyText: (text) => ipcRenderer.invoke('copy-text', text),
 });
 
 console.log('🔒 Stealth Notepad: Preload loaded successfully');

@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 addMessage(displayText, 'user');
             } else if (msg.role === 'assistant') {
-                addMessage(renderMarkdown(msg.content), 'ai');
+                addMessage(renderMarkdown(msg.content), 'ai', msg.content);
             }
         });
     }
@@ -218,7 +218,7 @@ async function sendChatMessage() {
         loadingMsg.remove();
 
         if (result.success) {
-            addMessage(renderMarkdown(result.content), 'ai');
+            addMessage(renderMarkdown(result.content), 'ai', result.content);
             // Simpan jawaban AI ke riwayat
             conversationHistory.push({ role: 'assistant', content: result.content });
             if (conversationHistory.length > 40) {
@@ -237,11 +237,42 @@ async function sendChatMessage() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Tambah pesan ke chat
-function addMessage(text, type) {
+// Tambah pesan ke chat dengan tombol salin (copy) cepat
+function addMessage(text, type, rawContent = null) {
     const div = document.createElement('div');
     div.className = `message ${type}`;
     div.innerHTML = text;
+
+    // Jika pesan dari AI, tambahkan tombol salin instan
+    if (type === 'ai' && !text.includes('⏳ Mengetik')) {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'msg-copy-btn';
+        copyBtn.title = 'Salin jawaban ini (Copy)';
+        copyBtn.innerHTML = '📋';
+        copyBtn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            let textToCopy = rawContent;
+            if (!textToCopy) {
+                const clone = div.cloneNode(true);
+                const btn = clone.querySelector('.msg-copy-btn');
+                if (btn) btn.remove();
+                textToCopy = clone.innerText.trim();
+            }
+            if (window.stealthAPI && window.stealthAPI.copyText) {
+                await window.stealthAPI.copyText(textToCopy);
+            } else {
+                navigator.clipboard.writeText(textToCopy);
+            }
+            copyBtn.innerHTML = '✅';
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+                copyBtn.innerHTML = '📋';
+                copyBtn.classList.remove('copied');
+            }, 1500);
+        });
+        div.appendChild(copyBtn);
+    }
+
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     return div;
