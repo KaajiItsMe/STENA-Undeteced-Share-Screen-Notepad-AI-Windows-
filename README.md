@@ -41,9 +41,10 @@ Bagi Anda yang hanya ingin langsung memakai aplikasi tanpa perlu menginstal Node
 2. **Ekstrak File ZIP:**  
    Klik kanan file zip hasil unduhan, lalu ekstrak (*Extract All*) ke folder mana saja di komputer Anda.
 3. **Jalankan Aplikasi (Siap Pakai / Zero-Setup):**  
-   Klik dua kali file **`Stena-Windows-1.0.0.exe`**. Aplikasi akan langsung berjalan di latar belakang secara rahasia dan **otomatis terhubung ke AI (Google Gemini 3.8 Flash)** tanpa perlu konfigurasi apapun!
+   Klik dua kali file **`Stena-Windows-1.0.0.exe`**.  
+   *(⚠️ Catatan: Saat pertama kali diklik, aplikasi membutuhkan waktu sekitar **3–8 detik** untuk inisialisasi di latar belakang tanpa memunculkan jendela apapun. Ini wajar karena aplikasi berjalan dalam mode siluman/portabel).*
 4. **Gunakan Shortcut Rahasia:**  
-   Tekan **`Ctrl + Shift + B`** untuk memunculkan atau menyembunyikan aplikasi kapan pun Anda butuhkan!
+   Setelah menunggu beberapa detik, tekan **`Ctrl + Shift + B`** di keyboard untuk memunculkan jendela aplikasi!
 5. **(Opsional) Gunakan API Pribadi:**  
    Jika ingin menggunakan API Key atau model AI sendiri (seperti 9Router / Groq), cukup masukkan kunci Anda ke file **`API.txt`**. Jika dibiarkan apa adanya, aplikasi tetap berfungsi normal menggunakan AI bawaan.
 

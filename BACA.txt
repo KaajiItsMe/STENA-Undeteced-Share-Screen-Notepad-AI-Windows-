@@ -4,6 +4,9 @@
 
 Aplikasi ini didesain untuk berjalan di belakang layar secara rahasia (Stealth Mode) dan tidak akan muncul di Taskbar.
 
+PENTING:
+Saat file .exe diklik/dijalankan, aplikasi membutuhkan waktu sekitar 3–8 detik untuk inisialisasi di latar belakang (tanpa memunculkan jendela apa pun). Tunggu beberapa detik, lalu tekan shortcut untuk memunculkannya!
+
 --- DAFTAR SHORTCUT (TOMBOL PINTAS) ---
 1. Buka / Sembunyikan Aplikasi
    Tekan: Ctrl + Shift + B
